@@ -20,12 +20,14 @@ namespace Desafio_Marlin.Contexts
         modelBuilder.Entity<Matricula>()
             .HasOne(m => m.Aluno)
             .WithMany(a => a.Matriculas)
-            .HasForeignKey(m => m.AlunoId);
+            .HasForeignKey(m => m.AlunoId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Matricula>()
             .HasOne(m => m.Turma)
             .WithMany(t => t.Matriculas)
-            .HasForeignKey(m => m.TurmaId);
+            .HasForeignKey(m => m.TurmaId)
+            .OnDelete(DeleteBehavior.Cascade);
     
         modelBuilder.Entity<Aluno>()
             .HasIndex(a => a.Cpf)

@@ -16,13 +16,25 @@ namespace Desafio_Marlin.Controllers
         
         [HttpPost("RealizarMatricula")]
         public IActionResult Matricular(int alunoId, int turmaId){
+            var aluno = _ctxt.Alunos.Find(alunoId);
+            var turma = _ctxt.Turmas.Find(turmaId);
+            
+            //Erros
             if (_ctxt.Matriculas.Any(m => m.AlunoId == alunoId && m.TurmaId == turmaId))
                 return BadRequest("Aluno já matriculado nesta turma!");
+            if(aluno == null)
+                return NotFound("Aluno não encontrado!");
+            if(turma == null)
+                return NotFound("Turma não encontrada!");
+            if(turma.Matriculas.Count >= 5)
+                return BadRequest("Turma cheia, apenas 5 alunos permitidos!");
+
 
             var matricula = new Matricula{
                 AlunoId = alunoId,
                 TurmaId = turmaId
             };
+
             _ctxt.Matriculas.Add(matricula);
             _ctxt.SaveChanges();
             return CreatedAtAction(nameof(ObterIdMatricula), new {id = matricula.Id}, matricula);

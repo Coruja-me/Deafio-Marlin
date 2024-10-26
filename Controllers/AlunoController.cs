@@ -27,6 +27,15 @@ namespace Desafio_Marlin.Controllers
             
             _ctxt.Add(aluno);
             _ctxt.SaveChanges();
+
+            if (alunoDTO.TurmaId.HasValue){
+                var matricula = new Matricula{
+                    AlunoId = aluno.Id,
+                    TurmaId = alunoDTO.TurmaId.Value
+                };
+                _ctxt.Matriculas.Add(matricula);
+                _ctxt.SaveChanges();
+            }
             return CreatedAtAction(nameof(ObterIdAluno), new {id = aluno.Id}, aluno);
         }
         
@@ -67,7 +76,7 @@ namespace Desafio_Marlin.Controllers
             return Ok(aluno);
         }
         [HttpPut("AtualizarAluno/{id}")]
-        public IActionResult AtualizarAluno(int id, Aluno aluno){
+        public IActionResult AtualizarAluno(int id, AlunoDTO aluno){
             var alunoDb = _ctxt.Alunos.Find(id);
 
             if(alunoDb == null)
@@ -83,17 +92,21 @@ namespace Desafio_Marlin.Controllers
             _ctxt.SaveChanges();
 
 
-            var alunoDTO = ConverterDto(alunoDb);
-            return CreatedAtAction(nameof(ObterIdAluno), new {id = alunoDb.Id}, alunoDTO); 
+            return CreatedAtAction(nameof(ObterIdAluno), new {id = alunoDb.Id}, aluno); 
         }
-        private static AlunoDTO ConverterDto(Aluno aluno) {
-            return new AlunoDTO {
-                Nome = aluno.Nome,
-                Cpf = aluno.Cpf,
-                Idade = aluno.Idade,
-                Email = aluno.Email,
-                Genero = aluno.Genero
-            };
+
+        [HttpDelete("DeletarAluno/{id}")]
+        public IActionResult DeletarAluno(int id){
+            var aluno = _ctxt.Alunos.Find(id);
+
+            if(aluno == null)
+                return NotFound();
+            
+            _ctxt.Alunos.Remove(aluno);
+            _ctxt.SaveChanges();
+            
+            return NoContent();
         }
+
     }
 }

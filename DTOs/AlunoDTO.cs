@@ -13,5 +13,6 @@ namespace Desafio_Marlin.DTOs
         public decimal Idade { get; set; }
         public Generos Genero { get; set; }
         public string Email { get; set; }
+        public int? TurmaId { get; set; }
     }
 }
