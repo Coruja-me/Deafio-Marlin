@@ -26,13 +26,31 @@ namespace Desafio_Marlin.Controllers
             var alunos = _ctxt.Alunos.ToList();
             if(alunos == null || alunos.Count == 0)
                 return NotFound();
-            
+
             return Ok(alunos);
         }
 
-        [HttpGet("AlunoID{Id}")]
-        public IActionResult ObterIdAluno(int Id){
-            var aluno = _ctxt.Alunos.Find(Id);
+        [HttpGet("AlunoID/{Id}")]
+        public IActionResult ObterIdAluno(int id){
+            var aluno = _ctxt.Alunos.Find(id);
+
+            if(aluno == null)
+                return NotFound();
+
+            return Ok(aluno);
+        }
+        [HttpGet("AlunoCPF/{cpf}")]
+        public IActionResult ObterCpfAluno(string cpf){
+            var aluno = _ctxt.Alunos.FirstOrDefault(x => x.Cpf == cpf);
+
+            if(aluno == null)
+                return NotFound();
+
+            return Ok(aluno);
+        }
+        [HttpGet("AlunoNome/{nome}")]
+        public IActionResult ObterNomeAlunos(string nome){
+            var aluno = _ctxt.Alunos.Where(x => x.Nome.Contains(nome));
 
             if(aluno == null)
                 return NotFound();
