@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Desafio_Marlin.Migrations
+namespace Desafio_Marlin.Migrations.Turma
 {
-    [DbContext(typeof(AlunoContext))]
-    [Migration("20241026004242_CriarTabelaAluno")]
-    partial class CriarTabelaAluno
+    [DbContext(typeof(TurmaContext))]
+    [Migration("20241026011022_CriarTabelaTurma")]
+    partial class CriarTabelaTurma
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace Desafio_Marlin.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Desafio_Marlin.Entities.Aluno", b =>
+            modelBuilder.Entity("Desafio_Marlin.Entities.Turma", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,20 +32,17 @@ namespace Desafio_Marlin.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Cpf")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
+                    b.Property<string>("Codigo")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("Nivel")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Alunos");
+                    b.ToTable("Turmas");
                 });
 #pragma warning restore 612, 618
         }

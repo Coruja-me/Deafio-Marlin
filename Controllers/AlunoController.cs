@@ -10,6 +10,6 @@ namespace Desafio_Marlin.Controllers
     [Route("api/[controller]")]
     public class AlunoController : ControllerBase
     {
-        
+        [HttpGet]
     }
 }

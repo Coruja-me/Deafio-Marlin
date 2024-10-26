@@ -29,8 +29,9 @@ namespace Desafio_Marlin.Migrations.Turma
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Codigo")
-                        .HasColumnType("int");
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Nivel")
                         .IsRequired()
