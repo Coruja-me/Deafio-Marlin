@@ -3,14 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AlunoContext>(optAluno =>
+builder.Services.AddDbContext<CursoContext>(optAluno =>
     optAluno.UseMySql(
-        builder.Configuration.GetConnectionString("mysql"),
-        new MySqlServerVersion(new Version(9, 1, 0))
-    )
-);
-builder.Services.AddDbContext<TurmaContext>(optTurma =>
-    optTurma.UseMySql(
         builder.Configuration.GetConnectionString("mysql"),
         new MySqlServerVersion(new Version(9, 1, 0))
     )
