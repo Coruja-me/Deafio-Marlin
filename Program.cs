@@ -1,5 +1,22 @@
+using Desafio_Marlin.Contexts;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<AlunoContext>(optAluno =>
+    optAluno.UseMySql(
+        builder.Configuration.GetConnectionString("mysql"),
+        new MySqlServerVersion(new Version(9, 1, 0))
+    )
+);
+builder.Services.AddDbContext<TurmaContext>(optTurma =>
+    optTurma.UseMySql(
+        builder.Configuration.GetConnectionString("mysql"),
+        new MySqlServerVersion(new Version(9, 1, 0))
+    )
+);
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -13,5 +30,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
