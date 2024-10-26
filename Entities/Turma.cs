@@ -11,6 +11,6 @@ namespace Desafio_Marlin.Entities
         public string Codigo { get; set; }
         public string Nivel { get; set; }
 
-        public ICollection<Matricula> Matriculas { get; set; }
+        public ICollection<Matricula> Matriculas { get; set; } = [];
     }
 }

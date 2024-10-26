@@ -15,6 +15,6 @@ namespace Desafio_Marlin.Entities
         public string Cpf { get; set; }
         public string Email { get; set; }
 
-        public ICollection<Matricula> Matriculas { get; set; }
+        public ICollection<Matricula> Matriculas { get; set; } = [];
     }
 }
