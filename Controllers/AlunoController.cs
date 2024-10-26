@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Desafio_Marlin.Contexts;
+using Desafio_Marlin.DTOs;
 using Desafio_Marlin.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,14 +16,22 @@ namespace Desafio_Marlin.Controllers
         private readonly CursoContext _ctxt = ctxt;
 
         [HttpPost("CriarAluno")]
-        public IActionResult CriarAluno(Aluno aluno){
+        public IActionResult CriarAluno(AlunoDTO alunoDTO){
+            var aluno = new Aluno{
+                Nome = alunoDTO.Nome,
+                Cpf = alunoDTO.Cpf,
+                Idade = alunoDTO.Idade,
+                Email = alunoDTO.Email,
+                Genero = alunoDTO.Genero
+            };
+            
             _ctxt.Add(aluno);
             _ctxt.SaveChanges();
             return CreatedAtAction(nameof(ObterIdAluno), new {id = aluno.Id}, aluno);
         }
         
-        [HttpGet("ListaAlunos")]
-        public ActionResult<List<Aluno>> ListaAlunos(){
+        [HttpGet("ListarAlunos")]
+        public ActionResult<List<Aluno>> ListarTodosAlunos(){
             var alunos = _ctxt.Alunos.ToList();
             if(alunos == null || alunos.Count == 0)
                 return NotFound();
@@ -50,12 +59,41 @@ namespace Desafio_Marlin.Controllers
         }
         [HttpGet("AlunoNome/{nome}")]
         public IActionResult ObterNomeAlunos(string nome){
-            var aluno = _ctxt.Alunos.Where(x => x.Nome.Contains(nome));
+            var aluno = _ctxt.Alunos.Where(x => x.Nome.Contains(nome)).ToList();
 
             if(aluno == null)
                 return NotFound();
 
             return Ok(aluno);
+        }
+        [HttpPut("AtualizarAluno/{id}")]
+        public IActionResult AtualizarAluno(int id, Aluno aluno){
+            var alunoDb = _ctxt.Alunos.Find(id);
+
+            if(alunoDb == null)
+                return NotFound();
+
+            alunoDb.Nome = aluno.Nome;
+            alunoDb.Cpf = aluno.Cpf;
+            alunoDb.Idade = aluno.Idade;
+            alunoDb.Genero = aluno.Genero;
+            alunoDb.Email = aluno.Email;
+
+            _ctxt.Alunos.Update(alunoDb);
+            _ctxt.SaveChanges();
+
+
+            var alunoDTO = ConverterDto(alunoDb);
+            return CreatedAtAction(nameof(ObterIdAluno), new {id = alunoDb.Id}, alunoDTO); 
+        }
+        private static AlunoDTO ConverterDto(Aluno aluno) {
+            return new AlunoDTO {
+                Nome = aluno.Nome,
+                Cpf = aluno.Cpf,
+                Idade = aluno.Idade,
+                Email = aluno.Email,
+                Genero = aluno.Genero
+            };
         }
     }
 }
