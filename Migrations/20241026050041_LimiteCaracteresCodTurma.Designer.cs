@@ -3,6 +3,7 @@ using Desafio_Marlin.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Desafio_Marlin.Migrations
 {
     [DbContext(typeof(CursoContext))]
-    partial class CursoContextModelSnapshot : ModelSnapshot
+    [Migration("20241026050041_LimiteCaracteresCodTurma")]
+    partial class LimiteCaracteresCodTurma
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +55,7 @@ namespace Desafio_Marlin.Migrations
                     b.HasIndex("Cpf")
                         .IsUnique();
 
-                    b.ToTable("Alunos", (string)null);
+                    b.ToTable("Alunos");
                 });
 
             modelBuilder.Entity("Desafio_Marlin.Entities.Matricula", b =>
@@ -70,7 +73,7 @@ namespace Desafio_Marlin.Migrations
 
                     b.HasIndex("TurmaId");
 
-                    b.ToTable("Matriculas", (string)null);
+                    b.ToTable("Matriculas");
                 });
 
             modelBuilder.Entity("Desafio_Marlin.Entities.Turma", b =>
@@ -99,7 +102,7 @@ namespace Desafio_Marlin.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Turmas", (string)null);
+                    b.ToTable("Turmas");
                 });
 
             modelBuilder.Entity("Desafio_Marlin.Entities.Matricula", b =>

@@ -28,6 +28,7 @@ namespace Desafio_Marlin.Contexts
             .WithMany(t => t.Matriculas)
             .HasForeignKey(m => m.TurmaId)
             .OnDelete(DeleteBehavior.Cascade);
+
     
         modelBuilder.Entity<Aluno>()
             .HasIndex(a => a.Cpf)

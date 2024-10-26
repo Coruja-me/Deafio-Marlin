@@ -3,6 +3,7 @@ using Desafio_Marlin.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Desafio_Marlin.Migrations
 {
     [DbContext(typeof(CursoContext))]
-    partial class CursoContextModelSnapshot : ModelSnapshot
+    [Migration("20241026041649_NovasPropsTurmas")]
+    partial class NovasPropsTurmas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,8 +43,8 @@ namespace Desafio_Marlin.Migrations
                     b.Property<int>("Genero")
                         .HasColumnType("int");
 
-                    b.Property<int>("Idade")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Idade")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -52,7 +55,7 @@ namespace Desafio_Marlin.Migrations
                     b.HasIndex("Cpf")
                         .IsUnique();
 
-                    b.ToTable("Alunos", (string)null);
+                    b.ToTable("Alunos");
                 });
 
             modelBuilder.Entity("Desafio_Marlin.Entities.Matricula", b =>
@@ -70,7 +73,7 @@ namespace Desafio_Marlin.Migrations
 
                     b.HasIndex("TurmaId");
 
-                    b.ToTable("Matriculas", (string)null);
+                    b.ToTable("Matriculas");
                 });
 
             modelBuilder.Entity("Desafio_Marlin.Entities.Turma", b =>
@@ -83,8 +86,7 @@ namespace Desafio_Marlin.Migrations
 
                     b.Property<string>("Codigo")
                         .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("varchar(3)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Nivel")
                         .IsRequired()
@@ -99,7 +101,7 @@ namespace Desafio_Marlin.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Turmas", (string)null);
+                    b.ToTable("Turmas");
                 });
 
             modelBuilder.Entity("Desafio_Marlin.Entities.Matricula", b =>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Desafio_Marlin.Contexts;
 using Desafio_Marlin.DTOs;
 using Desafio_Marlin.Entities;
+using Desafio_Marlin.Enuns;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Desafio_Marlin.Controllers
@@ -17,6 +18,9 @@ namespace Desafio_Marlin.Controllers
 
         [HttpPost("CriarAluno")]
         public IActionResult CriarAluno(AlunoDTO alunoDTO){
+            if (_ctxt.Alunos.FirstOrDefault(a => a.Cpf == alunoDTO.Cpf) != null)
+                return BadRequest("Esse CPF já existe");
+            
             var aluno = new Aluno{
                 Nome = alunoDTO.Nome,
                 Cpf = alunoDTO.Cpf,
@@ -28,10 +32,15 @@ namespace Desafio_Marlin.Controllers
             _ctxt.Add(aluno);
             _ctxt.SaveChanges();
 
-            if (alunoDTO.TurmaId.HasValue){
+            if (alunoDTO.TurmaId.HasValue && alunoDTO.TurmaId.Value != 0){
+                var turma = _ctxt.Turmas.Find(alunoDTO.TurmaId.Value);
+                if(turma == null)
+                    return NotFound("Turma não existe!");
                 var matricula = new Matricula{
                     AlunoId = aluno.Id,
-                    TurmaId = alunoDTO.TurmaId.Value
+                    TurmaId = alunoDTO.TurmaId.Value,
+                    Aluno = aluno,
+                    Turma = turma
                 };
                 _ctxt.Matriculas.Add(matricula);
                 _ctxt.SaveChanges();
@@ -62,16 +71,25 @@ namespace Desafio_Marlin.Controllers
             var aluno = _ctxt.Alunos.FirstOrDefault(x => x.Cpf == cpf);
 
             if(aluno == null)
-                return NotFound();
+                return NotFound("CPF não encontrado!");
 
             return Ok(aluno);
         }
         [HttpGet("AlunoNome/{nome}")]
-        public IActionResult ObterNomeAlunos(string nome){
+        public IActionResult ListarNomeAlunos(string nome){
             var aluno = _ctxt.Alunos.Where(x => x.Nome.Contains(nome)).ToList();
 
             if(aluno == null)
                 return NotFound();
+
+            return Ok(aluno);
+        }
+        [HttpGet("Generos/{generos}")]
+        public IActionResult ListarGeneroAlunos(Generos generos){
+            var aluno = _ctxt.Alunos.Where(x => x.Genero == generos).ToList();
+
+            if(aluno == null)
+                return NotFound("Aluno com genero especificado não encontrado!");
 
             return Ok(aluno);
         }

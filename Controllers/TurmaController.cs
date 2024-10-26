@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Desafio_Marlin.Contexts;
 using Desafio_Marlin.DTOs;
 using Desafio_Marlin.Entities;
+using Desafio_Marlin.Enuns;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Desafio_Marlin.Controllers
@@ -17,9 +18,14 @@ namespace Desafio_Marlin.Controllers
 
         [HttpPost("CriarTurma")]
         public IActionResult CriarTurma(TurmaDTO turmaDTO){
+            if (turmaDTO.Codigo.Length > 3)
+                return BadRequest("O código não pode passar de 3 caracteres!");
+    
             var turma = new Turma{
-                Codigo = turmaDTO.Codigo,
-                Nivel = turmaDTO.Nivel
+                Codigo = turmaDTO.Codigo.ToUpper(),
+                Nome = turmaDTO.Nome,
+                Nivel = turmaDTO.Nivel,
+                Periodo = turmaDTO.Periodo
             };
             
             _ctxt.Add(turma);
@@ -46,23 +52,48 @@ namespace Desafio_Marlin.Controllers
 
             return Ok(Turma);
         }
-        [HttpGet("TurmaCPF/{cpf}")]
-        public IActionResult ObterCpfTurma(string cpf){
-            var Turma = _ctxt.Turmas.FirstOrDefault(x => x.Cpf == cpf);
+        [HttpGet("TurmaCod/{codigo}")]
+        public IActionResult ObterCpfTurma(string codigo){
+            var turma = _ctxt.Turmas.Where(x => x.Codigo.Contains(codigo));
 
-            if(Turma == null)
+            if(turma == null)
                 return NotFound();
 
-            return Ok(Turma);
+            return Ok(turma);
         }
-        [HttpGet("TurmaNome/{nome}")]
-        public IActionResult ObterNomeTurmas(string nome){
-            var Turma = _ctxt.Turmas.Where(x => x.Nome.Contains(nome)).ToList();
+        [HttpGet("TurmaNivel/{nivel}")]
+        public IActionResult ObterNomeTurmas(string nivel){
+            var turma = _ctxt.Turmas.Where(x => x.Nivel.Contains(nivel)).ToList();
 
-            if(Turma == null)
+            if(turma == null)
                 return NotFound();
 
-            return Ok(Turma);
+            return Ok(turma);
+        }
+        [HttpGet("TurmaPeriodo/{periodo}")]
+        public IActionResult ObterPeriodosTurmas(Periodos periodo){
+            var turma = _ctxt.Turmas.Where(x => x.Periodo == periodo).ToList();
+
+            if(turma == null)
+                return NotFound();
+
+            return Ok(turma);
+        }
+
+        [HttpDelete("DeletarTurma/{id}")]
+        public IActionResult DeletarAluno(int id){
+            var turma = _ctxt.Turmas.Find(id);
+
+            if(turma == null)
+                return NotFound();
+            if(turma.Matriculas.Count > 0){
+                return BadRequest("Não é possível deletar uma turma que possua um aluno matriculado!");
+            }
+            
+            _ctxt.Turmas.Remove(turma);
+            _ctxt.SaveChanges();
+            
+            return NoContent();
         }
     }
 }

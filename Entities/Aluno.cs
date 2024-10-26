@@ -14,7 +14,7 @@ namespace Desafio_Marlin.Entities
         public string Nome { get; set; }
         [Required]
         public string Cpf { get; set; }
-        public decimal Idade { get; set; }
+        public int Idade { get; set; }
         public Generos Genero { get; set; }
         public string Email { get; set; }
 

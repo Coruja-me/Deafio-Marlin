@@ -10,7 +10,7 @@ namespace Desafio_Marlin.DTOs
     {
         public string Nome { get; set; }
         public string Cpf { get; set; }
-        public decimal Idade { get; set; }
+        public int Idade { get; set; }
         public Generos Genero { get; set; }
         public string Email { get; set; }
         public int? TurmaId { get; set; }
